@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../models/product.dart';
+import '../widgets/product_item.dart';
 
 class ProductsOverviewScreen extends StatelessWidget {
   ProductsOverviewScreen({Key? key}) : super(key: key);
@@ -54,7 +54,8 @@ class ProductsOverviewScreen extends StatelessWidget {
           mainAxisSpacing: 10,
         ),
         itemBuilder: (context, index) {
-          return Container();
+          return ProductItem(productLists[index].id, productLists[index].title,
+              productLists[index].imageUrl);
         },
         itemCount: productLists.length,
         padding: const EdgeInsets.all(10),
