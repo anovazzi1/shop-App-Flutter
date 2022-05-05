@@ -11,9 +11,7 @@ import 'package:flutter/material.dart';
 //   return myTheme;
 // }
 ThemeData myTheme = ThemeData(
-    primarySwatch: Colors.purple,
-    colorScheme: ColorScheme.fromSwatch()
-        .copyWith(secondary: Colors.deepOrange, primary: Colors.purple),
+  colorScheme: ColorScheme.fromSwatch()
+      .copyWith(secondary: Colors.deepOrange, primary: Colors.purple),
   fontFamily: 'Lato',
 );
-

@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:shop_app_flutter/screens/products_overview_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_app_flutter/route_generator.dart';
 import './theme.dart';
+import 'providers/products_provider.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'MyShop',
-      theme: myTheme,
-      home: ProductsOverviewScreen(),
+    return ChangeNotifierProvider(
+      create: (context) => Products(),
+      child: MaterialApp(
+        title: 'MyShop',
+        theme: myTheme,
+        onGenerateRoute: RouteGenerator.generateRoute,
+      ),
     );
   }
 }
