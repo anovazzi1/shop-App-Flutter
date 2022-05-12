@@ -16,6 +16,7 @@ class CardItem {
 
 class Cart with ChangeNotifier {
   Map<String, CardItem> _items = {};
+
   get items => {..._items};
 
   int get itemCount {
@@ -42,5 +43,13 @@ class Cart with ChangeNotifier {
               id: DateTime.now().toString(), title: title, price: price));
     }
     notifyListeners();
+  }
+
+  double get totalPrice {
+    double total = 0;
+    _items.forEach((key, value) {
+      total += value.price * value.quantity;
+    });
+    return total;
   }
 }
