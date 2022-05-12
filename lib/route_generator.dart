@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app_flutter/screens/cart_screen.dart';
+import 'package:shop_app_flutter/screens/orders_screen.dart';
 import '/screens/product_detail_screen.dart';
 import '/screens/products_overview_screen.dart';
 
@@ -17,6 +18,8 @@ class RouteGenerator {
             builder: (context) => ProductDetailScreen(args));
       case CartScreen.route:
         return MaterialPageRoute(builder: (context) => CartScreen());
+      case OrderScreen.route:
+        return MaterialPageRoute(builder: (context) => OrderScreen());
       default:
         return MaterialPageRoute(builder: (context) => ErrorRoute());
     }

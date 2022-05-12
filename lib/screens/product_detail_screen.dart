@@ -26,16 +26,17 @@ class ProductDetailScreen extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 LoadedProduct.title,
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text('\$${LoadedProduct.price}'),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Text(
