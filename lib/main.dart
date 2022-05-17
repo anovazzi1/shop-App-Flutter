@@ -35,7 +35,7 @@ class MyHomePage extends StatelessWidget {
         title: Text('MyShop'),
       ),
       body: Center(
-        child: Text('Let\'s build a shop!'),
+        child: const Text('Let\'s build a shop!'),
       ),
     );
   }
