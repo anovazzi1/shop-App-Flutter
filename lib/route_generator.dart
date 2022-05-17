@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app_flutter/screens/cart_screen.dart';
+import 'package:shop_app_flutter/screens/edit_product_screen.dart';
 import 'package:shop_app_flutter/screens/orders_screen.dart';
+import 'package:shop_app_flutter/screens/user_product_screen.dart';
 import '/screens/product_detail_screen.dart';
 import '/screens/products_overview_screen.dart';
 
@@ -20,6 +22,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => CartScreen());
       case OrderScreen.route:
         return MaterialPageRoute(builder: (context) => OrderScreen());
+      case UserProductsScreen.route:
+        return MaterialPageRoute(builder: (context) => UserProductsScreen());
+      case EditProductScreen.route:
+        return MaterialPageRoute(builder: (context) => EditProductScreen());
       default:
         return MaterialPageRoute(builder: (context) => ErrorRoute());
     }

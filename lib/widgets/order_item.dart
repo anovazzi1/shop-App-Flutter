@@ -39,7 +39,7 @@ class _OrderItemState extends State<OrderItem> {
                     children: [
                       Text(
                         widget.orderItem.products[index].title,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(
                           '\$${widget.orderItem.products[index].quantity} x \$${widget.orderItem.products[index].price}')
