@@ -25,7 +25,11 @@ class RouteGenerator {
       case UserProductsScreen.route:
         return MaterialPageRoute(builder: (context) => UserProductsScreen());
       case EditProductScreen.route:
-        return MaterialPageRoute(builder: (context) => EditProductScreen());
+        args as String?;
+        return MaterialPageRoute(
+            builder: (context) => EditProductScreen(
+                  productId: args,
+                ));
       default:
         return MaterialPageRoute(builder: (context) => ErrorRoute());
     }
