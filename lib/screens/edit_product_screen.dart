@@ -34,7 +34,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void saveForm() {
+  void saveForm() async {
     if (!_form.currentState!.validate()) {
       return;
     }
@@ -69,7 +69,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       });
     } else {
       print(_editProduct.isFavorite);
-      Provider.of<Products>(context, listen: false).updateProduct(
+      await Provider.of<Products>(context, listen: false).updateProduct(
         widget.productId!,
         Product(
             id: widget.productId!,
