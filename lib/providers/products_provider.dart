@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/product.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../models/exception.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [];
@@ -94,7 +95,16 @@ class Products with ChangeNotifier {
   void deleteProduct(String id) {
     final url = Uri.parse(
         "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/products/$id.json");
-    http.delete(url);
+    var productIndex = _items.indexWhere((element) => element.id == id);
+    Product? removedProduct = _items[productIndex];
+    http
+        .delete(url)
+        .then((response) => response.statusCode >= 400
+            ? removedProduct = null
+            : throw HttpException("could not delet product"))
+        .catchError((error) {
+      _items.insert(productIndex, removedProduct!);
+    });
     _items.removeWhere((element) => element.id == id);
     notifyListeners();
   }
