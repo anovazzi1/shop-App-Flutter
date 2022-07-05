@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app_flutter/providers/auth.dart';
 import 'package:shop_app_flutter/providers/card.dart';
 import 'package:shop_app_flutter/providers/orders.dart';
 import 'package:shop_app_flutter/route_generator.dart';
@@ -15,7 +16,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => Products()),
         ChangeNotifierProvider(create: (context) => Cart()),
-        ChangeNotifierProvider(create: (context) => Orders())
+        ChangeNotifierProvider(create: (context) => Orders()),
+        ChangeNotifierProvider(
+          create: (context) => Auth(),
+        )
       ],
       child: MaterialApp(
         title: 'MyShop',
