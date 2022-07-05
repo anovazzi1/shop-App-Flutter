@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app_flutter/screens/auth_screen.dart';
 import 'package:shop_app_flutter/screens/cart_screen.dart';
 import 'package:shop_app_flutter/screens/edit_product_screen.dart';
 import 'package:shop_app_flutter/screens/orders_screen.dart';
@@ -12,8 +13,7 @@ class RouteGenerator {
     final name = settings.name;
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(
-            builder: (context) => ProductsOverviewScreen());
+        return MaterialPageRoute(builder: (context) => AuthScreen());
       case ProductDetailScreen.productDetailRoute:
         args as String;
         return MaterialPageRoute(
