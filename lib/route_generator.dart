@@ -12,8 +12,6 @@ class RouteGenerator {
     final args = settings.arguments;
     final name = settings.name;
     switch (settings.name) {
-      case '/':
-        return MaterialPageRoute(builder: (context) => AuthScreen());
       case ProductDetailScreen.productDetailRoute:
         args as String;
         return MaterialPageRoute(

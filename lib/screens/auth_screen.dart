@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app_flutter/providers/auth.dart';
+import '../models/exception.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -110,12 +111,28 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authMode == AuthMode.Login) {
-      await Provider.of<Auth>(context, listen: false)
-          .signIn(_authData['email']!, _authData['password']!);
-    } else {
-      await Provider.of<Auth>(context, listen: false)
-          .signup(_authData['email']!, _authData['password']!);
+    try {
+      if (_authMode == AuthMode.Login) {
+        await Provider.of<Auth>(context, listen: false)
+            .signIn(_authData['email']!, _authData['password']!);
+      } else {
+        await Provider.of<Auth>(context, listen: false)
+            .signup(_authData['email']!, _authData['password']!);
+      }
+    } on HttpException catch (error) {
+      var errorMessage = 'Authentication Failed';
+      if (error.toString().contains('EMAIL_EXISTS')) {
+        errorMessage = 'this email address is alredy in use';
+      } else if (error.toString().contains('INVALID_EMAIL')) {
+        errorMessage = 'Invalid Email Adress';
+      } else if (error.toString().contains('WEAK_PASSOWRD')) {
+        errorMessage = "Password is too weak, please use a stronger password";
+      } else if (error.toString().contains("INVALID_PASSWORD")) {
+        errorMessage = "Invalid Password, please try again";
+      }
+      _ShowError(errorMessage);
+    } catch (error) {
+      var errorMessage = 'could not authenticate. Please try again later';
     }
     setState(() {
       _isLoading = false;
@@ -132,6 +149,22 @@ class _AuthCardState extends State<AuthCard> {
         _authMode = AuthMode.Login;
       });
     }
+  }
+
+  void _ShowError(String message) {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: Text("An Error Occurred"),
+              content: Text(message),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Close'))
+              ],
+            ));
   }
 
   @override

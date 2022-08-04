@@ -11,9 +11,12 @@ class Products with ChangeNotifier {
     return [..._items];
   }
 
+  String? authToken;
+  Products(this.authToken, this._items);
+
   Future<void> fetchProducts() async {
     var url = Uri.parse(
-        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/products.json");
+        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/products.json?auth=$authToken");
     try {
       final List<Product> loadedProducts = [];
       final response = await http.get(url);

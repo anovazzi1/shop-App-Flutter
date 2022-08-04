@@ -4,6 +4,8 @@ import 'package:shop_app_flutter/providers/auth.dart';
 import 'package:shop_app_flutter/providers/card.dart';
 import 'package:shop_app_flutter/providers/orders.dart';
 import 'package:shop_app_flutter/route_generator.dart';
+import 'package:shop_app_flutter/screens/auth_screen.dart';
+import 'package:shop_app_flutter/screens/products_overview_screen.dart';
 import './theme.dart';
 import 'providers/products_provider.dart';
 
@@ -13,21 +15,28 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => Products()),
-        ChangeNotifierProvider(create: (context) => Cart()),
-        ChangeNotifierProvider(create: (context) => Orders()),
-        ChangeNotifierProvider(
-          create: (context) => Auth(),
-        )
-      ],
-      child: MaterialApp(
-        title: 'MyShop',
-        theme: myTheme,
-        onGenerateRoute: RouteGenerator.generateRoute,
-        debugShowCheckedModeBanner: false,
-      ),
-    );
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => Auth(),
+          ),
+          ChangeNotifierProxyProvider<Auth, Products>(
+              create: (ctx) => Products('', []),
+              update: (ctx, auth, previousProducts) => Products(auth.getToken(),
+                  previousProducts == null ? [] : previousProducts.items)),
+          ChangeNotifierProvider(create: (context) => Cart()),
+          ChangeNotifierProvider(create: (context) => Orders()),
+        ],
+        child: Consumer<Auth>(
+          builder: (context, auth, _) {
+            return MaterialApp(
+              title: 'MyShop',
+              theme: myTheme,
+              onGenerateRoute: RouteGenerator.generateRoute,
+              debugShowCheckedModeBanner: false,
+              home: auth.isLogged() ? ProductsOverviewScreen() : AuthScreen(),
+            );
+          },
+        ));
   }
 }
 
