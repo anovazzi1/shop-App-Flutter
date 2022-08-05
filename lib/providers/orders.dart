@@ -22,7 +22,8 @@ class OrderItem {
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
   final String? token;
-  Orders(this.token, this._orders);
+  final String? userId;
+  Orders(this.token, this._orders, this.userId);
 
   List<OrderItem> get orders => [..._orders];
 

@@ -65,4 +65,6 @@ class Auth with ChangeNotifier {
     print(_token);
     return _token != null;
   }
+
+  get userId => _userId;
 }

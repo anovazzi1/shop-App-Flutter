@@ -11,12 +11,15 @@ class Products with ChangeNotifier {
     return [..._items];
   }
 
+  final String userId;
   String? authToken;
-  Products(this.authToken, this._items);
+  Products(this.authToken, this._items, this.userId);
 
-  Future<void> fetchProducts() async {
+  Future<void> fetchProducts([bool filterByUser = false]) async {
+    final String filterString =
+        filterByUser ? "orderBy=\"creatorId\"&equalTo=\"$userId\"" : "";
     var url = Uri.parse(
-        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/products.json?auth=$authToken");
+        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterString");
     try {
       final List<Product> loadedProducts = [];
       final response = await http.get(url);
@@ -24,6 +27,11 @@ class Products with ChangeNotifier {
       if (data == null) {
         return;
       }
+      final favoritesUrl = Uri.parse(
+          "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken");
+      final favoriteResponse = await http.get(favoritesUrl);
+      final favoriteData = json.decode(favoriteResponse.body);
+
       data.forEach((prodId, prodData) {
         loadedProducts.add(Product(
             id: prodId,
@@ -31,7 +39,8 @@ class Products with ChangeNotifier {
             description: prodData['description'],
             imageUrl: prodData['imageUrl'],
             price: prodData['price'],
-            isFavorite: prodData['isFavorite']));
+            isFavorite:
+                favoriteData == null ? false : favoriteData[prodId] ?? false));
       });
       _items = loadedProducts;
       notifyListeners();
@@ -58,8 +67,8 @@ class Products with ChangeNotifier {
               'description': product.description,
               'price': product.price,
               'imageUrl': product.imageUrl,
-              'isFavorite': product.isFavorite,
-              'id': DateTime.now().toString()
+              'id': DateTime.now().toString(),
+              'creatorId': userId,
             }))
         .then((response) {
       final newProduct = Product(
