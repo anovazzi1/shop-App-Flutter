@@ -6,6 +6,7 @@ import 'package:shop_app_flutter/providers/orders.dart';
 import 'package:shop_app_flutter/route_generator.dart';
 import 'package:shop_app_flutter/screens/auth_screen.dart';
 import 'package:shop_app_flutter/screens/products_overview_screen.dart';
+import 'package:shop_app_flutter/screens/splash_screen.dart';
 import './theme.dart';
 import 'providers/products_provider.dart';
 
@@ -40,7 +41,16 @@ class MyApp extends StatelessWidget {
               theme: myTheme,
               onGenerateRoute: RouteGenerator.generateRoute,
               debugShowCheckedModeBanner: false,
-              home: auth.isLogged() ? ProductsOverviewScreen() : AuthScreen(),
+              home: auth.isLogged()
+                  ? ProductsOverviewScreen()
+                  : FutureBuilder(
+                      builder: (context, authoSapshot) =>
+                          authoSapshot.connectionState ==
+                                  ConnectionState.waiting
+                              ? SplashScreen()
+                              : AuthScreen(),
+                      future: auth.autoLogin(),
+                    ),
             );
           },
         ));

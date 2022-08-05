@@ -4,11 +4,14 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
 import 'package:shop_app_flutter/api_key.dart';
 import '../models/exception.dart';
+import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth with ChangeNotifier {
   String? _token;
   DateTime? _expiryDate;
   String? _userId;
+  Timer? _authTimer = null;
 
   Future<void> signup(String email, String password) async {
     final url = Uri.parse(
@@ -46,7 +49,15 @@ class Auth with ChangeNotifier {
       _userId = responseData['localId'];
       _expiryDate = DateTime.now()
           .add(Duration(seconds: int.parse(responseData['expiresIn'])));
+      autoLogout();
       notifyListeners();
+      final userData = jsonEncode({
+        'token': _token,
+        'userId': _userId,
+        'expiryDate': _expiryDate!.toIso8601String()
+      });
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('userData', userData);
     } catch (error) {
       throw error;
     }
@@ -68,10 +79,44 @@ class Auth with ChangeNotifier {
 
   get userId => _userId;
 
-  void logout() {
+  Future<void> logout() async {
     _token = null;
     _userId = null;
     _expiryDate = null;
+    if (_authTimer != null) {
+      _authTimer!.cancel();
+      _authTimer = null;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+    }
+
     notifyListeners();
+  }
+
+  void autoLogout() {
+    if (_authTimer != null) {
+      _authTimer!.cancel();
+    }
+    var timer = _expiryDate!.difference(DateTime.now());
+    Timer(Duration(seconds: int.parse(timer.toString())), logout);
+  }
+
+  Future<bool> autoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('userData')) {
+      return false;
+    }
+    final userData =
+        json.decode(prefs.getString('userData')!) as Map<String, String>;
+    final expiryDate = DateTime.parse(userData['expiryDate']!);
+    if (expiryDate.isBefore(DateTime.now())) {
+      return false;
+    }
+    _token = userData['token'];
+    _userId = userData['userId'];
+    _expiryDate = expiryDate;
+    notifyListeners();
+    autoLogout();
+    return true;
   }
 }
