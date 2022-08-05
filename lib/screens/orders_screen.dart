@@ -41,14 +41,19 @@ class _OrderScreenState extends State<OrderScreen> {
                 return Center(child: Text(dataSnapshot.error.toString()));
               } else {
                 return Consumer<Orders>(
-                    builder: (context, orderData, child) => ListView.builder(
-                          itemBuilder: (context, index) {
-                            return order_widget.OrderItem(
-                              orderItem: orderData.orders[index],
-                            );
-                          },
-                          itemCount: orderData.orders.length,
-                        ));
+                    builder: (context, orderData, child) =>
+                        orderData.orders.isNotEmpty
+                            ? ListView.builder(
+                                itemBuilder: (context, index) {
+                                  return order_widget.OrderItem(
+                                    orderItem: orderData.orders[index],
+                                  );
+                                },
+                                itemCount: orderData.orders.length,
+                              )
+                            : Center(
+                                child: Text("No Orders yet"),
+                              ));
               }
             }
           },

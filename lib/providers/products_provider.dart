@@ -11,7 +11,7 @@ class Products with ChangeNotifier {
     return [..._items];
   }
 
-  final String userId;
+  final String? userId;
   String? authToken;
   Products(this.authToken, this._items, this.userId);
 

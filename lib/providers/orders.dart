@@ -29,11 +29,13 @@ class Orders with ChangeNotifier {
 
   Future<void> fetchAndSetOrders() async {
     final url = Uri.parse(
-        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/orders.json?auth=$token");
+        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/orders/$userId.json?auth=$token");
     final response = await get(url);
     final List<OrderItem> loadedOrders = [];
+    if (jsonDecode(response.body) == null) {
+      return;
+    }
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
-    print(extractedData);
     extractedData.forEach((orderId, value) {
       loadedOrders.add(OrderItem(
           id: orderId,
@@ -53,7 +55,7 @@ class Orders with ChangeNotifier {
 
   Future<void> addOrder(List<CardItem> cartProducts, double total) async {
     final url = Uri.parse(
-        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/orders.json");
+        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/orders/$userId.json?auth=$token");
     final now = DateTime.now();
     try {
       final response = await post(
