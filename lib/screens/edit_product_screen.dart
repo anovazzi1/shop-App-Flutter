@@ -68,8 +68,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
         });
       });
     } else {
-      print(_editProduct.isFavorite);
-      await Provider.of<Products>(context, listen: false).updateProduct(
+      await Provider.of<Products>(context, listen: false)
+          .updateProduct(
         widget.productId!,
         Product(
             id: widget.productId!,
@@ -78,7 +78,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
             imageUrl: _editProduct.imageUrl,
             price: _editProduct.price,
             isFavorite: _editProduct.isFavorite),
-      );
+      )
+          .catchError((error) {
+        return showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("An Error ocurred"),
+                content: Text(error.toString()),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("okay"))
+                ],
+              );
+            });
+      });
+      Navigator.of(context).pop();
       setState(() {
         isLoading = false;
       });

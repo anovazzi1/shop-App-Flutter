@@ -63,6 +63,7 @@ class Cart with ChangeNotifier {
       return;
     }
     _items[id]!.quantity > 1 ? _items[id]!.quantity -= 1 : _items.remove(id);
+    notifyListeners();
   }
 
   void clear() {

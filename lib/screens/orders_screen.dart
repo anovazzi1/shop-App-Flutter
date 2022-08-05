@@ -15,7 +15,7 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   Future? _orderFuture;
   Future obtainOrdersFuture() {
-    return Provider.of<Orders>(context).fetchAndSetOrders();
+    return Provider.of<Orders>(context, listen: false).fetchAndSetOrders();
   }
 
   @override

@@ -50,7 +50,7 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product product) {
     final url = Uri.parse(
-        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/products.json");
+        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/products.json?auth=$authToken");
     return http
         .post(url,
             body: json.encode({
@@ -79,9 +79,9 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product updatedProduct) async {
     var newProductIndex = _items.indexWhere((element) => element.id == id);
     final url = Uri.parse(
-        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/products/$id.json");
+        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken");
     try {
-      if (newProductIndex > 0) {
+      if (newProductIndex >= 0) {
         await http.patch(url,
             body: json.encode({
               'title': updatedProduct.title,
@@ -100,7 +100,7 @@ class Products with ChangeNotifier {
 
   void deleteProduct(String id) {
     final url = Uri.parse(
-        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/products/$id.json");
+        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken");
     var productIndex = _items.indexWhere((element) => element.id == id);
     Product? removedProduct = _items[productIndex];
     http

@@ -11,28 +11,28 @@ class OrderItem {
   final List<CardItem> products;
   final DateTime time;
 
-  OrderItem(
-      {required this.id,
-      required this.ammount,
-      required this.products,
-      required this.time});
+  OrderItem({
+    required this.id,
+    required this.ammount,
+    required this.products,
+    required this.time,
+  });
 }
 
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
+  final String? token;
+  Orders(this.token, this._orders);
 
   List<OrderItem> get orders => [..._orders];
 
   Future<void> fetchAndSetOrders() async {
     final url = Uri.parse(
-        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/orders.json");
+        "https://shoppappflutter-4318e-default-rtdb.firebaseio.com/orders.json?auth=$token");
     final response = await get(url);
     final List<OrderItem> loadedOrders = [];
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
     print(extractedData);
-    if (extractedData == Null) {
-      return;
-    }
     extractedData.forEach((orderId, value) {
       loadedOrders.add(OrderItem(
           id: orderId,
