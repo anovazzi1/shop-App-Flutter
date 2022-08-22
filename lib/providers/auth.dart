@@ -35,7 +35,7 @@ class Auth with ChangeNotifier {
     final url = Uri.parse(
         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${ApiKey.key}");
     try {
-      var response = await post(url,
+      final response = await post(url,
           body: jsonEncode({
             "email": email,
             "password": password,
@@ -72,9 +72,8 @@ class Auth with ChangeNotifier {
     return null;
   }
 
-  bool isLogged() {
-    print(_token);
-    return _token != null;
+  bool get isLogged {
+    return (_token != null);
   }
 
   get userId => _userId;
@@ -86,28 +85,28 @@ class Auth with ChangeNotifier {
     if (_authTimer != null) {
       _authTimer!.cancel();
       _authTimer = null;
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.clear();
     }
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove("userData");
 
     notifyListeners();
   }
 
-  void autoLogout() {
+  Future<void> autoLogout() async {
     if (_authTimer != null) {
       _authTimer!.cancel();
     }
     var timer = _expiryDate!.difference(DateTime.now());
-    Timer(Duration(seconds: int.parse(timer.toString())), logout);
+    _authTimer = Timer(Duration(seconds: int.parse(timer.toString())), logout);
   }
 
   Future<bool> autoLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('userData')) {
+    if (!prefs.containsKey('userData')) {
       return false;
     }
     final userData =
-        json.decode(prefs.getString('userData')!) as Map<String, String>;
+        json.decode(prefs.getString('userData')!) as Map<String, dynamic>;
     final expiryDate = DateTime.parse(userData['expiryDate']!);
     if (expiryDate.isBefore(DateTime.now())) {
       return false;

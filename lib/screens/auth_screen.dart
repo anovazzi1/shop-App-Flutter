@@ -136,7 +136,6 @@ class _AuthCardState extends State<AuthCard> {
     }
     setState(() {
       _isLoading = false;
-      _authMode = AuthMode.Login;
     });
   }
 

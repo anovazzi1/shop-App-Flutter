@@ -41,32 +41,18 @@ class MyApp extends StatelessWidget {
               theme: myTheme,
               onGenerateRoute: RouteGenerator.generateRoute,
               debugShowCheckedModeBanner: false,
-              home: auth.isLogged()
+              home: auth.isLogged
                   ? ProductsOverviewScreen()
                   : FutureBuilder(
-                      builder: (context, authoSapshot) =>
+                      future: auth.autoLogin(),
+                      builder: (ctx, authoSapshot) =>
                           authoSapshot.connectionState ==
                                   ConnectionState.waiting
                               ? SplashScreen()
                               : AuthScreen(),
-                      future: auth.autoLogin(),
                     ),
             );
           },
         ));
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('MyShop'),
-      ),
-      body: Center(
-        child: const Text('Let\'s build a shop!'),
-      ),
-    );
   }
 }
