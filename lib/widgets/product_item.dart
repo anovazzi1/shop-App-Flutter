@@ -23,8 +23,9 @@ class ProductItem extends StatelessWidget {
                 arguments: item.id);
           },
           enableFeedback: null,
-          child: Image.network(
-            item.imageUrl,
+          child: FadeInImage(
+            placeholder: AssetImage("assets/images/product-placeholder.png"),
+            image: NetworkImage(item.imageUrl),
             fit: BoxFit.fill,
           ),
         ),
